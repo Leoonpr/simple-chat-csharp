@@ -1,19 +1,23 @@
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using System.Collections.Generic;
+using System.Linq;
 
-namespace simple_chat_csharp.Pages;
-
-public class IndexModel : PageModel
+namespace simple_chat_csharp.Pages
 {
-    private readonly ILogger<IndexModel> _logger;
-
-    public IndexModel(ILogger<IndexModel> logger)
+    public class IndexModel : PageModel
     {
-        _logger = logger;
-    }
+        private readonly SimpleChatContext _context;
 
-    public void OnGet()
-    {
+        public IndexModel(SimpleChatContext context)
+        {
+            _context = context;
+        }
 
+        public List<Message> Messages { get; set; }
+
+        public void OnGet()
+        {
+            Messages = _context.Messages.OrderBy(m => m.Timestamp).ToList();
+        }
     }
 }
